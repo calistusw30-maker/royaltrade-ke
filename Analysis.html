@@ -150,8 +150,30 @@ iframe{
 </div>
 
 <script>
-document.getElementById('rf').innerHTML = 'LIVE TEST WORKING';
-document.getElementById('rf').style.color = 'lime';
+<script>
+function signal(type){
+  let result = "";
+
+  if(type === 'risefall'){
+    result = Math.random() > 0.5 ? '📈 BUY RISE' : '📉 BUY FALL';
+    document.getElementById('risefall-result').innerHTML = result;
+  }
+
+  if(type === 'matches'){
+    result = Math.random() > 0.5 ? '🎯 MATCH' : '❌ DIFFER';
+    document.getElementById('matches-result').innerHTML = result;
+  }
+
+  if(type === 'odd'){
+    result = Math.random() > 0.5 ? '🔢 ODD' : '🔢 EVEN';
+    document.getElementById('odd-result').innerHTML = result;
+  }
+
+  if(type === 'under'){
+    result = Math.random() > 0.5 ? '⬇️ UNDER 5' : '⬆️ OVER 5';
+    document.getElementById('under-result').innerHTML = result;
+  }
+}
 </script>
 </body>
 </html>
