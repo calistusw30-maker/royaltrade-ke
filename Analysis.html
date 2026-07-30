@@ -1,117 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Analysis</title>
-  <style>
-    body{
-      background:#08122b;
-      color:white;
-      font-family:Arial,sans-serif;
-      padding:20px;
-    }
-    .card{
-      background:#111c36;
-      padding:20px;
-      border-radius:20px;
-      margin-bottom:20px;
-    }
-    h2{
-      color:#2ea3ff;
-    }
-    button{
-      width:100%;
-      padding:18px;
-      border:none;
-      border-radius:15px;
-      background:#2563eb;
-      color:white;
-      font-size:20px;
-    }
-    p{
-      font-size:28px;
-      font-weight:bold;
-      margin-top:15px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analysis</title>
+
+<style>
+body{
+    margin:0;
+    background:#030f2b;
+    font-family:Arial, sans-serif;
+    color:white;
+    padding:15px;
+}
+
+.card{
+    background:#0d1735;
+    border-radius:25px;
+    padding:20px;
+    margin-bottom:25px;
+    box-shadow:0 0 15px rgba(0,0,0,0.3);
+}
+
+h2{
+    color:#2ea3ff;
+    margin-bottom:20px;
+    font-size:22px;
+}
+
+button{
+    width:100%;
+    padding:18px;
+    border:none;
+    border-radius:18px;
+    background:#2563eb;
+    color:white;
+    font-size:22px;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+.result{
+    font-size:22px;
+    font-weight:bold;
+    margin-top:18px;
+}
+
+.time{
+    display:block;
+    margin-top:8px;
+    color:#9ca3af;
+    font-size:14px;
+}
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    background:#111827;
+    display:flex;
+    justify-content:space-around;
+    padding:12px 0;
+    border-top:1px solid #1f2937;
+}
+
+.bottom-nav a{
+    color:white;
+    text-decoration:none;
+    font-size:14px;
+}
+</style>
 </head>
+
 <body>
 
-  <div class="card">
-<p id="rise">Waiting...</p>
-<small id="rise-time" style="color:#9ca3af;"></small>
+<div class="card">
+    <h2>Rise / Fall</h2>
     <button onclick="riseFall()">Generate Signal</button>
-  <small id="rise-time" style="color:#9ca3af;"></small>
-  </div>
+    <div class="result" id="rise">Waiting...</div>
+    <span class="time" id="rise-time"></span>
+</div>
 
-  <div class="card">
+<div class="card">
     <h2>Matches / Differs</h2>
     <button onclick="matchDiff()">Generate Signal</button>
-    <p id="match">Waiting...</p>
-  </div>
+    <div class="result" id="match">Waiting...</div>
+    <span class="time" id="match-time"></span>
+</div>
 
-  <div class="card">
+<div class="card">
     <h2>Odd / Even</h2>
     <button onclick="oddEven()">Generate Signal</button>
-    <p id="odd">Waiting...</p>
-  </div>
+    <div class="result" id="odd">Waiting...</div>
+    <span class="time" id="odd-time"></span>
+</div>
 
-  <div class="card">
+<div class="card">
     <h2>Under / Over</h2>
     <button onclick="underOver()">Generate Signal</button>
-    <small id="under-time" style="color:#9ca3af;"></small>
-  </div>
+    <div class="result" id="under">Waiting...</div>
+    <span class="time" id="under-time"></span>
+</div>
 
-  <script>
-    function riseFall(){
-  const r = Math.random() > 0.5 ? '📈 BUY RISE' : '📉 BUY FALL';
-  const t = new Date().toLocaleTimeString();
-
-  document.getElementById('rise').innerHTML = r;
-  document.getElementById('rise-time').innerHTML = 'Time: ' + t;
+<script>
+function nowTime(){
+    return new Date().toLocaleTimeString();
 }
 
-  document.getElementById('rise').innerHTML = r;
-  document.getElementById('rise-time').innerHTML = 'Time: ' + t;
+function riseFall(){
+    const r = Math.random() > 0.5 ? '📈 BUY RISE' : '📉 BUY FALL';
+    document.getElementById('rise').innerHTML = r;
+    document.getElementById('rise-time').innerHTML = 'Time: ' + nowTime();
 }
 
-    function matchDiff(){
-      const r = Math.random() > 0.5 ? '🎯 MATCH' : '❌ DIFFER';
-      document.getElementById('match').innerHTML = r;
-    }
-
-    function oddEven(){
-      const r = Math.random() > 0.5 ? '🔢 ODD' : '🔢 EVEN';
-      document.getElementById('odd').innerHTML = r;
-    }
-
-    function underOver(){
-  const r = Math.random() > 0.5 ? '⬇️ UNDER 5' : '⬆️ OVER 5';
-  const t = new Date().toLocaleTimeString();
-
-  document.getElementById('under').innerHTML = r;
-  document.getElementById('under-time').innerHTML = 'Time: ' + t;
+function matchDiff(){
+    const r = Math.random() > 0.5 ? '🎯 MATCH' : '❌ DIFFER';
+    document.getElementById('match').innerHTML = r;
+    document.getElementById('match-time').innerHTML = 'Time: ' + nowTime();
 }
-    }
-  </script>
+
+function oddEven(){
+    const r = Math.random() > 0.5 ? '🔢 ODD' : '🔢 EVEN';
+    document.getElementById('odd').innerHTML = r;
+    document.getElementById('odd-time').innerHTML = 'Time: ' + nowTime();
+}
+
+function underOver(){
+    const r = Math.random() > 0.5 ? '⬇️ UNDER 5' : '⬆️ OVER 5';
+    document.getElementById('under').innerHTML = r;
+    document.getElementById('under-time').innerHTML = 'Time: ' + nowTime();
+}
+</script>
+
+<div style="height:70px"></div>
+
+<div class="bottom-nav">
+    <a href="index.html">Home</a>
+    <a href="Analysis.html">Analyse</a>
+    <a href="signals.html">Signals</a>
+    <a href="deposit.html">Deposit</a>
+    <a href="withdraw.html">Withdraw</a>
+</div>
 
 </body>
-  <div class="tradingview-widget-container">
-  <div id="tradingview_chart"></div>
-  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-  <script type="text/javascript">
-    new TradingView.widget({
-      "width": "100%",
-      "height": 300,
-      "symbol": "FX:EURUSD",
-      "interval": "5",
-      "timezone": "Etc/UTC",
-      "theme": "dark",
-      "style": "1",
-      "locale": "en",
-      "container_id": "tradingview_chart"
-    });
-  </script>
-</div>
 </html>
