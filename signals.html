@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Signals</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#0f172a;
+  color:white;
+}
+header{
+  background:#111827;
+  padding:18px;
+  text-align:center;
+  font-size:24px;
+  font-weight:bold;
+  color:#38bdf8;
+}
+.container{
+  padding:18px;
+}
+.card{
+  background:#1e293b;
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:16px;
+  box-shadow:0 0 12px rgba(0,0,0,.35);
+}
+.label{
+  color:#94a3b8;
+  font-size:14px;
+}
+.value{
+  font-size:24px;
+  font-weight:bold;
+  margin-top:6px;
+}
+.buy{color:#22c55e;}
+.sell{color:#ef4444;}
+.neutral{color:#f59e0b;}
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:#2563eb;
+  color:white;
+  font-size:17px;
+  font-weight:bold;
+  margin-top:12px;
+}
+.small{
+  font-size:13px;
+  color:#94a3b8;
+  text-align:center;
+  margin-top:10px;
+}
+.nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  display:flex;
+  justify-content:space-around;
+  background:#111827;
+  padding:12px 0;
+}
+.nav a{
+  color:white;
+  text-decoration:none;
+  font-size:14px;
+}
+.space{height:70px;}
+</style>
+</head>
+
+<body>
+
+<header>📡 Live Signals</header>
+
+<div class="container">
+
+  <div class="card">
+    <div class="label">Market Status</div>
+    <div id="marketStatus" class="value buy">OPEN</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Current Signal</div>
+    <div id="signal" class="value neutral">WAITING...</div>
+    <button onclick="generateSignal()">Generate Live Signal</button>
+  </div>
+
+  <div class="card">
+    <div class="label">Signal Strength</div>
+    <div id="strength" class="value neutral">0%</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Last Updated</div>
+    <div id="updated" class="value" style="font-size:18px;">--:--:--</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Forex Pair</div>
+    <div id="pair" class="value" style="font-size:22px;">EUR/USD</div>
+  </div>
+
+  <div class="small">
+    Signals refresh automatically every 10 seconds.
+  </div>
+
+</div>
+
+<div class="space"></div>
+
+<div class="nav">
+  <a href="index.html">Home</a>
+  <a href="Analysis.html">Analyse</a>
+  <a href="signals.html">Signals</a>
+</div>
+
+<script>
+const pairs = ['EUR/USD','GBP/USD','USD/JPY','AUD/USD','USD/CAD'];
+
+function generateSignal(){
+  const signals = [
+    {text:'📈 BUY', cls:'buy'},
+    {text:'📉 SELL', cls:'sell'},
+    {text:'⏳ WAIT', cls:'neutral'}
+  ];
+
+  const pick = signals[Math.floor(Math.random()*signals.length)];
+  const strength = Math.floor(Math.random()*31)+70; // 70-100%
+
+  const signalEl = document.getElementById('signal');
+  signalEl.innerHTML = pick.text;
+  signalEl.className = 'value ' + pick.cls;
+
+  const strengthEl = document.getElementById('strength');
+  strengthEl.innerHTML = strength + '%';
+  strengthEl.className = 'value ' + pick.cls;
+
+  document.getElementById('pair').innerHTML =
+    pairs[Math.floor(Math.random()*pairs.length)];
+
+  const now = new Date();
+  document.getElementById('updated').innerHTML =
+    now.toLocaleTimeString();
+}
+
+// first load
+generateSignal();
+
+// auto refresh every 10 seconds
+setInterval(generateSignal,10000);
+</script>
+
+</body>
+</html>
