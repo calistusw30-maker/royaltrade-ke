@@ -39,7 +39,8 @@
 <body>
 
   <div class="card">
-    <h2>Rise / Fall</h2>
+<p id="rise">Waiting...</p>
+<small id="rise-time" style="color:#9ca3af;"></small>
     <button onclick="riseFall()">Generate Signal</button>
   <small id="rise-time" style="color:#9ca3af;"></small>
   </div>
@@ -66,6 +67,10 @@
     function riseFall(){
   const r = Math.random() > 0.5 ? '📈 BUY RISE' : '📉 BUY FALL';
   const t = new Date().toLocaleTimeString();
+
+  document.getElementById('rise').innerHTML = r;
+  document.getElementById('rise-time').innerHTML = 'Time: ' + t;
+}
 
   document.getElementById('rise').innerHTML = r;
   document.getElementById('rise-time').innerHTML = 'Time: ' + t;
