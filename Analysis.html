@@ -134,8 +134,18 @@ function underOver(){
     document.getElementById('under').innerHTML = r;
     document.getElementById('under-time').innerHTML = 'Time: ' + nowTime();
 }
-</script>
+    let countdown = 10;
 
+setInterval(() => {
+  countdown--;
+  if (countdown <= 0) countdown = 10;
+  document.getElementById('countdown').innerHTML =
+    'Next signal in: ' + countdown + 's';
+}, 1000);
+</script>
+<div id="countdown" style="color:#fff; font-size:18px; padding:10px 20px; text-align:center;">
+Next signal in: 10s
+</div>
 <h2 style="color:#2f7cff; padding:15px 20px 0;">Live Forex Chart</h2>
 
 <div class="tradingview-widget-container" style="padding:0 15px 20px;">
