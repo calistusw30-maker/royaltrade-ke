@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Trading Website</title>
+  <style>
+    body{
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:#0f172a;
+      color:white;
+    }
+    nav{
+      position:sticky;
+      top:0;
+      background:#111827;
+      padding:15px;
+      text-align:center;
+      z-index:1000;
+    }
+    nav a{
+      color:white;
+      text-decoration:none;
+      margin:0 10px;
+      font-weight:bold;
+    }
+    section{
+      padding:30px 20px;
+      border-bottom:1px solid #1e293b;
+    }
+    h1,h2{
+      color:#38bdf8;
+    }
+    .card{
+      background:#111827;
+      padding:20px;
+      border-radius:15px;
+      margin-top:15px;
+      box-shadow:0 0 10px rgba(0,0,0,0.3);
+    }
+    .buy{ color:#22c55e; font-weight:bold; }
+    .sell{ color:#ef4444; font-weight:bold; }
+    button{
+      padding:12px 20px;
+      border:none;
+      border-radius:10px;
+      background:#2563eb;
+      color:white;
+      font-size:16px;
+      margin:5px;
+    }
+    input{
+      width:100%;
+      padding:12px;
+      margin:10px 0;
+      border-radius:10px;
+      border:none;
+    }
+    .whatsapp{
+      position:fixed;
+      bottom:20px;
+      right:20px;
+      background:#25D366;
+      color:white;
+      width:60px;
+      height:60px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      font-size:30px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#home">Home</a>
+  <a href="#analysis">Analysis</a>
+  <a href="#signals">Signals</a>
+  <a href="#bot">Bot</a>
+  <a href="#deposit">Deposit</a>
+  <a href="#withdraw">Withdraw</a>
+</nav>
+
+<section id="home">
+  <h1>My Trading Platform</h1>
+  <p>Live signals, market analysis, trading bot tools, deposits and withdrawals.</p>
+
+  <div class="card">
+    <h3>Live Price</h3>
+    <p>EUR/USD: <strong>1.1720</strong></p>
+    <p>BTC/USD: <strong>118,450</strong></p>
+  </div>
+</section>
+
+<section id="analysis">
+  <h2>Market Analysis</h2>
+
+  <div class="card">
+    <p><strong>Trend:</strong> Bullish</p>
+    <p><strong>RSI:</strong> 62</p>
+    <p><strong>EMA20:</strong> Above EMA50</p>
+    <p class="buy">Signal: BUY</p>
+  </div>
+
+  <div class="card">
+    <h3>Chart</h3>
+    <p>You can later replace this with a TradingView chart.</p>
+  </div>
+</section>
+
+<section id="signals">
+  <h2>Trading Signals</h2>
+
+  <div class="card">
+    <h3 class="buy">BUY EUR/USD</h3>
+    <p>Entry: 1.1720</p>
+    <p>Take Profit: 1.1760</p>
+    <p>Stop Loss: 1.1680</p>
+  </div>
+
+  <div class="card">
+    <h3 class="sell">SELL GBP/USD</h3>
+    <p>Entry: 1.2850</p>
+    <p>Take Profit: 1.2790</p>
+    <p>Stop Loss: 1.2890</p>
+  </div>
+</section>
+
+<section id="bot">
+  <h2>Trading Bot</h2>
+
+  <div class="card">
+    <p>Bot Status: <strong id="botStatus">Stopped</strong></p>
+
+    <button onclick="startBot()">Start Bot</button>
+    <button onclick="stopBot()">Stop Bot</button>
+  </div>
+</section>
+
+<section id="deposit">
+  <h2>Deposit</h2>
+
+  <div class="card">
+    <p><strong>M-Pesa Paybill:</strong> 123456</p>
+    <p><strong>Account Number:</strong> YOURNAME</p>
+    <p>Send your deposit and contact support on WhatsApp.</p>
+  </div>
+</section>
+
+<section id="withdraw">
+  <h2>Withdraw</h2>
+
+  <div class="card">
+    <form>
+      <input type="text" placeholder="Full Name" required>
+      <input type="text" placeholder="M-Pesa Number" required>
+      <input type="number" placeholder="Amount" required>
+      <button type="submit">Request Withdrawal</button>
+    </form>
+  </div>
+</section>
+
+<section>
+  <p style="text-align:center;color:#94a3b8;">© 2026 My Trading Website</p>
+</section>
+
+<a class="whatsapp" href="https://wa.me/254700000000" target="_blank">💬</a>
+
+<script>
+  function startBot(){
+    document.getElementById('botStatus').innerText='Running';
+  }
+  function stopBot(){
+    document.getElementById('botStatus').innerText='Stopped';
+  }
+</script>
+
+</body>
+</html>
