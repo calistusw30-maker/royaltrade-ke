@@ -150,66 +150,84 @@ iframe{
 </div>
 
 <script>
-function randomChoice(arr){
-  return arr[Math.floor(Math.random()*arr.length)];
-}
+<script>
+// ===== LIVE DERIV DATA =====
+const ws = new WebSocket('wss://ws.derivws.com/websockets/v3?app_id=1089');
 
-function riseFall(){
-  let s = randomChoice([
-    '<span class="buy">📈 RISE</span>',
-    '<span class="sell">📉 FALL</span>'
-  ]);
-  document.getElementById('rf').innerHTML = s;
-}
+// Subscribe to Volatility 10 Index ticks
+ws.onopen = () => {
+  ws.send(JSON.stringify({
+    ticks: 'R_10'
+  }));
+};
 
-function matchDiff(){
-  let s = randomChoice([
-    '<span class="buy">✔ MATCHES</span>',
-    '<span class="sell">✖ DIFFERS</span>'
-  ]);
-  document.getElementById('md').innerHTML = s;
-}
+ws.onmessage = (msg) => {
+  const data = JSON.parse(msg.data);
 
-function oddEven(){
-  let s = randomChoice([
-    '<span class="buy">🔢 ODD</span>',
-    '<span class="sell">🔢 EVEN</span>'
-  ]);
-  document.getElementById('oe').innerHTML = s;
-}
+  if(data.tick){
+    const price = data.tick.quote.toString();
+    const lastDigit = parseInt(price.slice(-1));
 
-function underOver(){
-  let s = randomChoice([
-    '<span class="buy">⬆ OVER</span>',
-    '<span class="sell">⬇ UNDER</span>'
-  ]);
-  document.getElementById('uo').innerHTML = s;
-}
+    // Odd / Even
+    const oe = document.getElementById('oe');
+    if(lastDigit % 2 === 0){
+      oe.innerHTML = '🔢 EVEN (' + lastDigit + ')';
+      oe.className = 'signal sell';
+    }else{
+      oe.innerHTML = '🔢 ODD (' + lastDigit + ')';
+      oe.className = 'signal buy';
+    }
 
-function forexSignal(){
-  let s = randomChoice([
-    '<span class="buy">BUY EUR/USD</span>',
-    '<span class="sell">SELL EUR/USD</span>',
-    '<span class="buy">BUY GBP/USD</span>',
-    '<span class="sell">SELL GBP/USD</span>'
-  ]);
-  document.getElementById('fx').innerHTML = s;
-}
+    // Under / Over
+    const uo = document.getElementById('uo');
+    if(lastDigit <= 4){
+      uo.innerHTML = '⬇ UNDER 5 (' + lastDigit + ')';
+      uo.className = 'signal sell';
+    }else{
+      uo.innerHTML = '⬆ OVER 5 (' + lastDigit + ')';
+      uo.className = 'signal buy';
+    }
 
-function aiAnalyze(){
-  let text = document.getElementById('marketInput').value.toLowerCase();
-  let result = '';
+    // Matches / Differs
+    const md = document.getElementById('md');
+    if(lastDigit === 7){
+      md.innerHTML = '✔ MATCHES 7';
+      md.className = 'signal buy';
+    }else{
+      md.innerHTML = '✖ DIFFERS 7';
+      md.className = 'signal sell';
+    }
 
-  if(text.includes('bull') || text.includes('buy') || text.includes('up')){
-    result = '🤖 AI: Market sentiment is BULLISH. Consider BUY opportunities.';
-  }else if(text.includes('bear') || text.includes('sell') || text.includes('down')){
-    result = '🤖 AI: Market sentiment is BEARISH. Consider SELL opportunities.';
-  }else{
-    result = '🤖 AI: Market is NEUTRAL. Wait for confirmation.';
+    // Rise / Fall based on previous digit
+    if(window.prevDigit !== undefined){
+      const rf = document.getElementById('rf');
+
+      if(lastDigit > window.prevDigit){
+        rf.innerHTML = '📈 RISE';
+        rf.className = 'signal buy';
+      }else if(lastDigit < window.prevDigit){
+        rf.innerHTML = '📉 FALL';
+        rf.className = 'signal sell';
+      }else{
+        rf.innerHTML = '➖ SAME';
+        rf.className = 'signal neutral';
+      }
+    }
+
+    window.prevDigit = lastDigit;
+
+    // Forex signal demo using live tick movement
+    const fx = document.getElementById('fx');
+    if(lastDigit % 2 === 0){
+      fx.innerHTML = 'BUY EUR/USD';
+      fx.className = 'signal buy';
+    }else{
+      fx.innerHTML = 'SELL EUR/USD';
+      fx.className = 'signal sell';
+    }
   }
-
-  document.getElementById('aiResult').innerHTML = result;
-}
+};
+</script>
 </script>
 
 </body>
