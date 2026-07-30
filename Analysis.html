@@ -41,7 +41,7 @@
   <div class="card">
     <h2>Rise / Fall</h2>
     <button onclick="riseFall()">Generate Signal</button>
-    <p id="rise">Waiting...</p>
+  <small id="rise-time" style="color:#9ca3af;"></small>
   </div>
 
   <div class="card">
@@ -59,14 +59,17 @@
   <div class="card">
     <h2>Under / Over</h2>
     <button onclick="underOver()">Generate Signal</button>
-    <p id="under">Waiting...</p>
+    <small id="under-time" style="color:#9ca3af;"></small>
   </div>
 
   <script>
     function riseFall(){
-      const r = Math.random() > 0.5 ? '📈 BUY RISE' : '📉 BUY FALL';
-      document.getElementById('rise').innerHTML = r;
-    }
+  const r = Math.random() > 0.5 ? '📈 BUY RISE' : '📉 BUY FALL';
+  const t = new Date().toLocaleTimeString();
+
+  document.getElementById('rise').innerHTML = r;
+  document.getElementById('rise-time').innerHTML = 'Time: ' + t;
+}
 
     function matchDiff(){
       const r = Math.random() > 0.5 ? '🎯 MATCH' : '❌ DIFFER';
@@ -79,8 +82,12 @@
     }
 
     function underOver(){
-      const r = Math.random() > 0.5 ? '⬇️ UNDER 5' : '⬆️ OVER 5';
-      document.getElementById('under').innerHTML = r;
+  const r = Math.random() > 0.5 ? '⬇️ UNDER 5' : '⬆️ OVER 5';
+  const t = new Date().toLocaleTimeString();
+
+  document.getElementById('under').innerHTML = r;
+  document.getElementById('under-time').innerHTML = 'Time: ' + t;
+}
     }
   </script>
 
