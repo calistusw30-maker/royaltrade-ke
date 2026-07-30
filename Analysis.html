@@ -94,33 +94,21 @@ iframe{
   </div>
 
   <!-- Rise/Fall -->
-  <div class="card">
-    <h2>Rise / Fall</h2>
-    <button onclick="riseFall()">Generate Signal</button>
-    <div id="rf" class="signal neutral">Waiting...</div>
-  </div>
+  <button onclick="signal('risefall')">Generate Signal</button>
+<p id="risefall-result">Waiting...</p>
 
   <!-- Matches/Differs -->
-  <div class="card">
-    <h2>Matches / Differs</h2>
-    <button onclick="matchDiff()">Generate Signal</button>
-    <div id="md" class="signal neutral">Waiting...</div>
-  </div>
+  <button onclick="signal('matches')">Generate Signal</button>
+<p id="matches-result">Waiting...</p>
+    
 
   <!-- Odd/Even -->
-  <div class="card">
-    <h2>Odd / Even Pattern</h2>
-    <button onclick="oddEven()">Generate Signal</button>
-    <div id="oe" class="signal neutral">Waiting...</div>
-  </div>
+  <button onclick="signal('odd')">Generate Signal</button>
+<p id="odd-result">Waiting...</p>
 
   <!-- Under/Over -->
-  <div class="card">
-    <h2>Under / Over</h2>
-    <button onclick="underOver()">Generate Signal</button>
-    <div id="uo" class="signal neutral">Waiting...</div>
-  </div>
-
+<button onclick="signal('under')">Generate Signal</button>
+<p id="under-result">Waiting...</p>
   <!-- Forex Signal -->
   <div class="card">
     <h2>Forex Signal</h2>
