@@ -115,24 +115,41 @@ function riseFall(){
     const r = Math.random() > 0.5 ? '📈 BUY RISE' : '📉 BUY FALL';
     document.getElementById('rise').innerHTML = r;
     document.getElementById('rise-time').innerHTML = 'Time: ' + nowTime();
+    addHistory(r);
 }
 
 function matchDiff(){
     const r = Math.random() > 0.5 ? '🎯 MATCH' : '❌ DIFFER';
     document.getElementById('match').innerHTML = r;
     document.getElementById('match-time').innerHTML = 'Time: ' + nowTime();
+    addHistory(r);
 }
 
 function oddEven(){
     const r = Math.random() > 0.5 ? '🔢 ODD' : '🔢 EVEN';
     document.getElementById('odd').innerHTML = r;
     document.getElementById('odd-time').innerHTML = 'Time: ' + nowTime();
+    addHistory(r);
 }
 
 function underOver(){
     const r = Math.random() > 0.5 ? '⬇️ UNDER 5' : '⬆️ OVER 5';
     document.getElementById('under').innerHTML = r;
     document.getElementById('under-time').innerHTML = 'Time: ' + nowTime();
+    addHistory(r);
+}
+   let historyList = [];
+
+function addHistory(signal){
+  const time = new Date().toLocaleTimeString();
+  historyList.unshift(signal + ' - ' + time);
+
+  if(historyList.length > 5){
+    historyList.pop();
+  }
+
+  document.getElementById('history').innerHTML =
+    historyList.join('<br>');
 }
     let countdown = 10;
 
