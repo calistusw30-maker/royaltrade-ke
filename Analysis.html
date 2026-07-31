@@ -337,5 +337,32 @@ Next signal in: 10s
    z-index:9999;">
    💬
 </a>
+    <!-- DERIV LOGIN BOX -->
+<div style="background:#08122e;padding:20px;margin-bottom:20px;border-radius:20px;">
+  <h2 style="color:#2f7cff;margin-top:0;">Connect Deriv Account</h2>
+
+  <button onclick="loginDeriv()"
+          style="width:100%;padding:15px;border:none;border-radius:12px;background:#ff444f;color:white;font-size:18px;font-weight:bold;">
+    🔐 Login with Deriv
+  </button>
+
+  <div id="loginStatus" style="color:white;margin-top:12px;">
+    Not connected
+  </div>
+</div>
+    <script>
+function loginDeriv() {
+  const appId = '33WowZixKmfaCV6d0DeGi';
+  const redirect = 'https://royaltrade-ke.netlify.app';
+
+  const url =
+    'https://oauth.deriv.com/oauth2/authorize?app_id=' +
+    appId +
+    '&l=EN&redirect_uri=' +
+    encodeURIComponent(redirect);
+
+  window.location.href = url;
+}
+</script>
 </body>
 </html>
