@@ -186,6 +186,16 @@ function updatePattern(value){
 
     document.getElementById('patternTrend').innerHTML = trend;
 }
+    // AUTO SIGNALS EVERY 10 SECONDS
+function autoSignals(){
+    riseFall();
+    matchDiff();
+    oddEven();
+    underOver();
+}
+
+// start automatic signals
+setInterval(autoSignals, 10000);
     let countdown = 10;
 
 setInterval(() => {
