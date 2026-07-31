@@ -203,8 +203,14 @@ function updatePattern(value){
 
         const buy = price > window.lastPrice;
 
-        document.getElementById('forexSignal').innerHTML =
-            buy ? '🟢 BUY' : '🔴 SELL';
+const diff = Math.abs(price - window.lastPrice);
+
+let strength = 'WEAK';
+if (diff > 0.0010) strength = 'STRONG';
+else if (diff > 0.0005) strength = 'MEDIUM';
+
+document.getElementById('forexSignal').innerHTML =
+    (buy ? '🟢 BUY' : '🔴 SELL') + ' • ' + strength;
 
         document.getElementById('forexSignal').style.color =
             buy ? '#00ff99' : '#ff4d4d';
