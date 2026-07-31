@@ -187,20 +187,44 @@ function updatePattern(value){
     document.getElementById('patternTrend').innerHTML = trend;
 }
     // AUTO SIGNALS EVERY 10 SECONDS
-    function forexSignal(){
-    const pairs = ['EUR/USD','GBP/USD','USD/JPY','AUD/USD'];
-    const pair = pairs[Math.floor(Math.random() * pairs.length)];
+    async function forexSignal(){
 
-    const buy = Math.random() > 0.5;
+    // Get live EUR/USD price
+    const url = 'https://api.frankfurter.app/latest?from=EUR&to=USD';
 
-    document.getElementById('forexSignal').innerHTML =
-        buy ? '🟢 BUY' : '🔴 SELL';
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
 
-    document.getElementById('forexSignal').style.color =
-        buy ? '#00ff99' : '#ff4d4d';
+        const price = data.rates.USD;
 
-    document.getElementById('forexPair').innerHTML = pair;
-    document.getElementById('forexTime').innerHTML = 'Time: ' + nowTime();
+        // Save previous price
+        if(!window.lastPrice){
+            window.lastPrice = price;
+        }
+
+        // Real signal from price movement
+        const buy = price > window.lastPrice;
+
+        document.getElementById('forexSignal').innerHTML =
+            buy ? '🟢 BUY' : '🔴 SELL';
+
+        document.getElementById('forexSignal').style.color =
+            buy ? '#00ff99' : '#ff4d4d';
+
+        document.getElementById('forexPair').innerHTML =
+            'EUR/USD • ' + price.toFixed(5);
+
+        document.getElementById('forexTime').innerHTML =
+            'Time: ' + new Date().toLocaleTimeString();
+
+        // Update previous price
+        window.lastPrice = price;
+
+    } catch (e) {
+        document.getElementById('forexSignal').innerHTML =
+            '⚠️ MARKET OFFLINE';
+    }
 }
 
 function autoSignals(){
