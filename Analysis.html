@@ -157,35 +157,35 @@ function addHistory(signal){
 }
    let patternList = [];
 
-function updatePattern(letter){
+function updatePattern(value){
+    patternList.push(value);
 
-  patternList.push(letter);
+    // keep only last 8 signals
+    if(patternList.length > 8){
+        patternList.shift();
+    }
 
-  if(patternList.length > 12){
-    patternList.shift();
-  }
+    document.getElementById('patternText').innerHTML =
+        patternList.join(' ');
 
-  document.getElementById('patternText').innerHTML =
-    patternList.join(' ');
+    let even = patternList.filter(x => x === 'E').length;
+    let odd = patternList.filter(x => x === 'O').length;
+    let total = patternList.length;
 
-  let even = patternList.filter(x => x === 'E').length;
-  let odd = patternList.filter(x => x === 'O').length;
-  let total = patternList.length;
+    let evenPct = total ? Math.round(even / total * 100) : 0;
+    let oddPct = total ? Math.round(odd / total * 100) : 0;
 
-  let evenPct = total ? Math.round(even / total * 100) : 0;
-  let oddPct = total ? Math.round(odd / total * 100) : 0;
+    document.getElementById('evenCount').innerHTML = even;
+    document.getElementById('oddCount').innerHTML = odd;
+    document.getElementById('evenPercent').innerHTML = evenPct;
+    document.getElementById('oddPercent').innerHTML = oddPct;
 
-  document.getElementById('evenCount').innerHTML = even;
-  document.getElementById('oddCount').innerHTML = odd;
-  document.getElementById('evenPercent').innerHTML = evenPct;
-  document.getElementById('oddPercent').innerHTML = oddPct;
+    let trend = 'Neutral';
+    if(evenPct > oddPct) trend = 'Even dominant';
+    if(oddPct > evenPct) trend = 'Odd dominant';
 
-  let trend = 'Neutral';
-
-  if(evenPct > oddPct) trend = 'Even dominant';
-  if(oddPct > evenPct) trend = 'Odd dominant';
-
-  document.getElementById('patternTrend').innerHTML = trend;
+    document.getElementById('patternTrend').innerHTML = trend;
+}
 } 
     let countdown = 10;
 
