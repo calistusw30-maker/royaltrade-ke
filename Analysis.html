@@ -190,13 +190,13 @@ function updatePattern(value){
     async function forexSignal(){
 
     // Get live EUR/USD price
-    const url = 'https://api.frankfurter.app/latest?from=EUR&to=USD';
+    const url = 'https://api.exchangerate.host/latest?base=EUR&symbols=USD';
 
     try {
         const res = await fetch(url);
         const data = await res.json();
 
-        const price = data.rates.USD;
+        const price = parseFloat(data.rates.USD);
 
         // Save previous price
         if(!window.lastPrice){
