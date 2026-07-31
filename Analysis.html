@@ -187,11 +187,28 @@ function updatePattern(value){
     document.getElementById('patternTrend').innerHTML = trend;
 }
     // AUTO SIGNALS EVERY 10 SECONDS
+    function forexSignal(){
+    const pairs = ['EUR/USD','GBP/USD','USD/JPY','AUD/USD'];
+    const pair = pairs[Math.floor(Math.random() * pairs.length)];
+
+    const buy = Math.random() > 0.5;
+
+    document.getElementById('forexSignal').innerHTML =
+        buy ? '🟢 BUY' : '🔴 SELL';
+
+    document.getElementById('forexSignal').style.color =
+        buy ? '#00ff99' : '#ff4d4d';
+
+    document.getElementById('forexPair').innerHTML = pair;
+    document.getElementById('forexTime').innerHTML = 'Time: ' + nowTime();
+}
+
 function autoSignals(){
-    riseFall();
-    matchDiff();
-    oddEven();
-    underOver();
+    riseFall();      // still works
+    matchDiff();     // still works
+    oddEven();       // still works
+    underOver();     // still works
+    forexSignal();   // new forex signal
 }
 
 // start automatic signals
@@ -229,6 +246,21 @@ Next signal in: 10s
   </div>
 </div>
     <h2 style="color:#2f7cff; padding:15px 20px 0;">Live Forex Chart</h2>
+    <div style="background:#08122e; margin:20px; padding:20px; border-radius:18px;">
+  <h2 style="color:#2f7cff; margin-top:0;">Forex Signal</h2>
+
+  <div id="forexSignal" style="font-size:28px; font-weight:bold; color:#00ff99;">
+    WAITING...
+  </div>
+
+  <div id="forexPair" style="margin-top:10px; color:#fff; font-size:18px;">
+    EUR/USD
+  </div>
+
+  <div id="forexTime" style="margin-top:8px; color:#bbb; font-size:14px;">
+    Time: --
+  </div>
+</div>
 <div class="tradingview-widget-container" style="padding:0 15px 20px;">
   <div id="tradingview_chart" style="height:400px;"></div>
 
