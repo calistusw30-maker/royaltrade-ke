@@ -129,7 +129,11 @@ function oddEven(){
     const r = Math.random() > 0.5 ? '🔢 ODD' : '🔢 EVEN';
     document.getElementById('odd').innerHTML = r;
     document.getElementById('odd-time').innerHTML = 'Time: ' + nowTime();
-    addHistory(r);
+    addHistory(r);if(r.includes('EVEN')){
+  updatePattern('E');
+} else {
+  updatePattern('O');
+}
 }
 
 function underOver(){
