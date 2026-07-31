@@ -189,8 +189,7 @@ function updatePattern(value){
     // AUTO SIGNALS EVERY 10 SECONDS
     async function forexSignal(){
 
-    // Get live EUR/USD price
-    const url = 'https://api.exchangerate.host/latest?base=EUR&symbols=USD';
+    const url = 'https://open.er-api.com/v6/latest/EUR';
 
     try {
         const res = await fetch(url);
@@ -198,12 +197,10 @@ function updatePattern(value){
 
         const price = parseFloat(data.rates.USD);
 
-        // Save previous price
         if(!window.lastPrice){
             window.lastPrice = price;
         }
 
-        // Real signal from price movement
         const buy = price > window.lastPrice;
 
         document.getElementById('forexSignal').innerHTML =
@@ -218,7 +215,6 @@ function updatePattern(value){
         document.getElementById('forexTime').innerHTML =
             'Time: ' + new Date().toLocaleTimeString();
 
-        // Update previous price
         window.lastPrice = price;
 
     } catch (e) {
