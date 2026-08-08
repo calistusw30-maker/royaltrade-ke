@@ -1,42 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang='en'>
 <head>
 <meta charset='UTF-8'>
-<meta name='viewport' content='width=device-width,initial-scale=1'>
-<title>Live Forex Signals</title>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>RoyalTrade Live Forex Signals</title>
+
 <style>
-body{font-family:Arial;background:#0f172a;color:#fff;margin:0;padding:20px}
-h1{text-align:center}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
-.card{background:#111827;border-radius:12px;padding:15px}
-.buy{color:#22c55e;font-weight:bold}
-.sell{color:#ef4444;font-weight:bold}
-.wait{color:#f59e0b;font-weight:bold}
-.price{font-size:24px;margin:8px 0}
-.small{font-size:12px;color:#94a3b8}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#07143a;
+  color:#fff;
+}
+header{
+  text-align:center;
+  padding:18px;
+  background:#0b1f5c;
+  font-size:24px;
+  font-weight:bold;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:15px;
+  padding:15px;
+}
+.card{
+  background:#0b1f5c;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 4px 12px rgba(0,0,0,.4);
+}
+.pair{
+  font-size:22px;
+  font-weight:bold;
+}
+.price{
+  font-size:28px;
+  margin:10px 0;
+}
+.buy{color:#22c55e;}
+.sell{color:#ef4444;}
+.wait{color:#facc15;}
+.level{
+  margin-top:8px;
+  font-size:15px;
+}
+.small{
+  font-size:12px;
+  color:#cbd5e1;
+  margin-top:8px;
+}
+footer{
+  text-align:center;
+  padding:12px;
+  color:#94a3b8;
+  font-size:12px;
+}
 </style>
 </head>
+
 <body>
 
-<h1>LIVE FOREX SIGNALS</h1>
+<header>📈 RoyalTrade Live Forex Signals</header>
+
 <div class='grid' id='signals'></div>
+
+<footer>Real-time forex scanner • Auto refresh every 5 seconds</footer>
 
 <script>
 const API_KEY = '0e0e9b5a995544eab90cf5e28c8344d3';
 
 const pairs = [
-  'EUR/USD',
-  'GBP/USD',
-  'USD/JPY',
-  'AUD/USD',
-  'USD/CHF',
-  'USD/CAD',
-  'NZD/USD',
-  'EUR/JPY'
+ 'EUR/USD',
+ 'GBP/USD',
+ 'USD/JPY',
+ 'AUD/USD',
+ 'USD/CHF',
+ 'USD/CAD',
+ 'NZD/USD',
+ 'EUR/JPY',
+ 'GBP/JPY'
 ];
 
-async function getSignal(pair){
-  const url = `https://api.twelvedata.com/time_series?symbol=${pair}&interval=1min&outputsize=20&apikey=${API_KEY}`;
+function ema(values, period){
+  const k = 2 / (period + 1);
+  let emaVal = values[0];
+  for(let i=1;i<values.length;i++){
+    emaVal = values[i] * k + emaVal * (1-k);
+  }
+  return emaVal;
+}
+
+function rsi(values, period=14){
+  let gains=0, losses=0;
+  for(let i=1;i<=period;i++){
+    const diff = values[values.length-i] - values[values.length-i-1];
+    if(diff>=0) gains += diff;
+    else losses -= diff;
+  }
+  const rs = gains / (losses || 1);
+  return 100 - (100 / (1 + rs));
+}
+
+async function analyze(pair){
+  const url = `https://api.twelvedata.com/time_series?symbol=${pair}&interval=1min&outputsize=50&apikey=${API_KEY}`;
 
   try{
     const res = await fetch(url);
@@ -44,25 +112,44 @@ async function getSignal(pair){
 
     if(!data.values) return null;
 
-    const values = data.values.map(v=>parseFloat(v.close)).reverse();
-    const current = values[values.length-1];
-    const previous = values[values.length-2];
+    const closes = data.values.map(v=>parseFloat(v.close)).reverse();
+    const price = closes[closes.length-1];
 
-    let signal='WAIT', cls='wait';
+    const ema9 = ema(closes.slice(-20),9);
+    const ema21 = ema(closes.slice(-30),21);
+    const rsi14 = rsi(closes);
 
-    if(current > previous){
+    let signal='WAIT';
+    let cls='wait';
+    let strength='NEUTRAL';
+
+    if(ema9 > ema21 && rsi14 > 55){
       signal='BUY';
       cls='buy';
-    }else if(current < previous){
+      strength = rsi14 > 65 ? 'STRONG' : 'WEAK';
+    }else if(ema9 < ema21 && rsi14 < 45){
       signal='SELL';
       cls='sell';
+      strength = rsi14 < 35 ? 'STRONG' : 'WEAK';
     }
+
+    const tp = signal==='BUY'
+      ? (price + price*0.002).toFixed(5)
+      : (price - price*0.002).toFixed(5);
+
+    const sl = signal==='BUY'
+      ? (price - price*0.001).toFixed(5)
+      : (price + price*0.001).toFixed(5);
 
     return {
       pair,
-      price: current.toFixed(5),
+      price: price.toFixed(5),
       signal,
       cls,
+      strength,
+      rsi: rsi14.toFixed(1),
+      tp,
+      sl,
       time: new Date().toLocaleTimeString()
     };
 
@@ -73,9 +160,9 @@ async function getSignal(pair){
 
 async function loadSignals(){
   const box = document.getElementById('signals');
-  box.innerHTML = 'Loading live signals...';
+  box.innerHTML = 'Loading live forex signals...';
 
-  const results = await Promise.all(pairs.map(getSignal));
+  const results = await Promise.all(pairs.map(analyze));
 
   box.innerHTML = '';
 
@@ -84,9 +171,16 @@ async function loadSignals(){
 
     box.innerHTML += `
       <div class='card'>
-        <h3>${r.pair}</h3>
+        <div class='pair'>${r.pair}</div>
         <div class='price'>${r.price}</div>
-        <div class='${r.cls}'>${r.signal}</div>
+        <div class='${r.cls}' style='font-size:22px;font-weight:bold'>
+          ${r.signal} • ${r.strength}
+        </div>
+
+        <div class='level'>📊 RSI: ${r.rsi}</div>
+        <div class='level'>🎯 TP: ${r.tp}</div>
+        <div class='level'>🛑 SL: ${r.sl}</div>
+
         <div class='small'>Updated: ${r.time}</div>
       </div>
     `;
@@ -94,7 +188,7 @@ async function loadSignals(){
 }
 
 loadSignals();
-setInterval(loadSignals, 15000);
+setInterval(loadSignals, 5000);
 </script>
 
 </body>
