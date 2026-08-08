@@ -160,31 +160,44 @@ async function analyze(pair){
 
 async function loadSignals(){
   const box = document.getElementById('signals');
-  box.innerHTML = 'Loading live forex signals...';
-
-  const results = await Promise.all(pairs.map(analyze));
-
   box.innerHTML = '';
 
-  results.forEach(r=>{
-    if(!r) return;
+  for (const pair of pairs) {
+    try {
+      const r = await analyze(pair);
 
-    box.innerHTML += `
-      <div class='card'>
-        <div class='pair'>${r.pair}</div>
-        <div class='price'>${r.price}</div>
-        <div class='${r.cls}' style='font-size:22px;font-weight:bold'>
-          ${r.signal} • ${r.strength}
-        </div>
+      if(!r){
+        box.innerHTML += `
+          <div class='card'>
+            <div class='pair'>${pair}</div>
+            <div class='wait'>Data unavailable</div>
+          </div>`;
+        continue;
+      }
 
-        <div class='level'>📊 RSI: ${r.rsi}</div>
-        <div class='level'>🎯 TP: ${r.tp}</div>
-        <div class='level'>🛑 SL: ${r.sl}</div>
+      box.innerHTML += `
+        <div class='card'>
+          <div class='pair'>${r.pair}</div>
+          <div class='price'>${r.price}</div>
 
-        <div class='small'>Updated: ${r.time}</div>
-      </div>
-    `;
-  });
+          <div class='${r.cls}' style='font-size:22px;font-weight:bold'>
+            ${r.signal} • ${r.strength}
+          </div>
+
+          <div class='level'>📊 RSI: ${r.rsi}</div>
+          <div class='level'>🎯 TP: ${r.tp}</div>
+          <div class='level'>🛑 SL: ${r.sl}</div>
+
+          <div class='small'>Updated: ${r.time}</div>
+        </div>`;
+    } catch (e) {
+      box.innerHTML += `
+        <div class='card'>
+          <div class='pair'>${pair}</div>
+          <div class='wait'>Connection error</div>
+        </div>`;
+    }
+  }
 }
 
 loadSignals();
