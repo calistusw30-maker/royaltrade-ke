@@ -131,12 +131,16 @@ async function getPrice(pair){
 function makeSignal(price){
   const lastDigit = Math.floor(price * 100000) % 10;
 
-  if(lastDigit >= 7){
-    return {text:'BUY', cls:'buy'};
-  }else if(lastDigit <= 2){
-    return {text:'SELL', cls:'sell'};
+  if(lastDigit >= 9){
+    return {text:'🟢 STRONG BUY', cls:'buy'};
+  }else if(lastDigit >= 7){
+    return {text:'🟢 BUY', cls:'buy'};
+  }else if(lastDigit <= 1){
+    return {text:'🔴 STRONG SELL', cls:'sell'};
+  }else if(lastDigit <= 3){
+    return {text:'🔴 SELL', cls:'sell'};
   }else{
-    return {text:'WAIT', cls:'wait'};
+    return {text:'🟡 WAIT', cls:'wait'};
   }
 }
 
