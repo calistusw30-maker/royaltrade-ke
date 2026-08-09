@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>RoyalTrade Live Forex</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#07143a;
+  color:#fff;
+}
+
+header{
+  background:#0b1f5c;
+  padding:18px;
+  text-align:center;
+  font-size:28px;
+  font-weight:bold;
+}
+
+.sub{
+  text-align:center;
+  color:#cbd5e1;
+  padding:10px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:15px;
+  padding:15px;
+}
+
+.card{
+  background:#0b1f5c;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 4px 12px rgba(0,0,0,.35);
+}
+
+.pair{
+  font-size:24px;
+  font-weight:bold;
+}
+
+.price{
+  font-size:32px;
+  margin:12px 0;
+}
+
+.buy{ color:#22c55e; font-weight:bold; }
+.sell{ color:#ef4444; font-weight:bold; }
+.wait{ color:#facc15; font-weight:bold; }
+
+.time{
+  margin-top:10px;
+  color:#cbd5e1;
+  font-size:13px;
+}
+
+footer{
+  text-align:center;
+  color:#94a3b8;
+  padding:18px;
+  font-size:12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>📈 RoyalTrade Live Forex</header>
+<div class='sub'>Live forex prices • Auto refresh every 10 seconds</div>
+
+<div class='grid' id='signals'></div>
+
+<footer>Demo real-time forex dashboard</footer>
+
+<script>
+const pairs = [
+  {name:'EURUSD', base:'EUR', quote:'USD'},
+  {name:'GBPUSD', base:'GBP', quote:'USD'},
+  {name:'USDJPY', base:'USD', quote:'JPY'},
+  {name:'AUDUSD', base:'AUD', quote:'USD'},
+  {name:'USDCHF', base:'USD', quote:'CHF'},
+  {name:'USDCAD', base:'USD', quote:'CAD'},
+  {name:'NZDUSD', base:'NZD', quote:'USD'}
+];
+
+async function getPrice(pair){
+  try{
+    const url = `https://open.er-api.com/v6/latest/${pair.base}`;
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if(data.result !== 'success') return null;
+
+    const price = data.rates[pair.quote];
+    return price;
+  }catch(e){
+    return null;
+  }
+}
+
+function makeSignal(price){
+  const lastDigit = Math.floor(price * 100000) % 10;
+
+  if(lastDigit >= 7){
+    return {text:'BUY', cls:'buy'};
+  }else if(lastDigit <= 2){
+    return {text:'SELL', cls:'sell'};
+  }else{
+    return {text:'WAIT', cls:'wait'};
+  }
+}
+
+async function loadSignals(){
+  const box = document.getElementById('signals');
+  box.innerHTML = '';
+
+  for(const pair of pairs){
+    const price = await getPrice(pair);
+
+    if(price === null){
+      box.innerHTML += `
+        <div class='card'>
+          <div class='pair'>${pair.name}</div>
+          <div class='wait'>Connection error</div>
+        </div>`;
+      continue;
+    }
+
+    const signal = makeSignal(price);
+
+    box.innerHTML += `
+      <div class='card'>
+        <div class='pair'>${pair.name}</div>
+        <div class='price'>${price.toFixed(5)}</div>
+        <div class='${signal.cls}' style='font-size:24px'>
+          ${signal.text}
+        </div>
+        <div class='time'>
+          Updated: ${new Date().toLocaleTimeString()}
+        </div>
+      </div>`;
+  }
+}
+
+loadSignals();
+setInterval(loadSignals, 10000);
+</script>
+
+</body>
+</html>
