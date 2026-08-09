@@ -116,19 +116,15 @@ const pairs = [
   
 
 
-const API_KEY = '0e0e9b5a995544eab90cf5e28c8344d3';
-
 async function getPrice(pair){
   try{
-    const symbol = pair.name;
-    const url = `https://api.twelvedata.com/price?symbol=${symbol}&apikey=${API_KEY}`;
-
+    const url = 'https://open.er-api.com/v6/latest/' + pair.base;
     const res = await fetch(url);
     const data = await res.json();
 
-    if(!data.price) return null;
+    if(data.result !== 'success') return null;
 
-    return parseFloat(data.price);
+    return data.rates[pair.quote];
   }catch(e){
     return null;
   }
